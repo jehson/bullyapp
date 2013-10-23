@@ -78,8 +78,6 @@ class BullyController {
 			System.out.println("NO RESPONSE");
 			ex.printStackTrace();
 		} finally {
-		
-			
 			httpClient.getConnectionManager().shutdown();
 		}
 

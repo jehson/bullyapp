@@ -50,11 +50,12 @@
 					
 						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseContentType")}</td>
 						
-						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseFile")}</td>
+						<%--<td>${fieldValue(bean: bullyInstance, field: "driversLicenseFile")}</td>
 					
-						<%--<td><image src="${createLink(controller:'bully', action:'getDriversLicenseImage', id:bullyInstance.ident()) }" width="120 px" /></td>
+						--%>
+						<td><image src="${createLink(controller:'bully', action:'getDriversLicenseImage', id:bullyInstance.ident()) }" width="120 px" /></td>
 					
-						--%><td>${fieldValue(bean: bullyInstance, field: "driversLicenseFileName")}</td>
+						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseFileName")}</td>
 					
 					</tr>
 				</g:each>
