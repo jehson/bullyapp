@@ -62,13 +62,13 @@ class BullyController {
     def save() {
 	def bully = new Bully(params)
 	//getFileDetails bully
-
+	println bully.driversLicenseFile
 	def b64 = Base64.byteArrayToBase64(bully.driversLicenseFile)
 	def reqString = "image=${b64}&key=${clientId}&type=base64"
 	def auth =  "Client-ID ${clientId}"
-	println reqString
-	println auth
+	
 	HttpClient httpClient = new DefaultHttpClient();
+	
 	try {
 	    HttpPost httpPost = new HttpPost(url);
 	    StringEntity body = new StringEntity(reqString);
@@ -83,9 +83,6 @@ class BullyController {
 	    def link = jsonData.get("link");
 	    
 	    bully.driversLicenseImageLink = link;
-	    
-	    // handle response here...
-	    log.error "JSON OBJECT is: ${jsonObject} RESPONSE IS: ${responseString}"
 	    
 	    if (!bully.save(flush: true)) {
 		render(view: "create", model: [bullyInstance: bully])
@@ -107,7 +104,6 @@ class BullyController {
 	    
 	    render(view: "create", model: [bullyInstance: bully])
 	    return
-	    
 	    
 	} finally {
 	    httpClient.getConnectionManager().shutdown();

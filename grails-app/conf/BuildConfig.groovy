@@ -44,7 +44,8 @@ grails.project.dependency.resolution = {
 		build 'org.apache.httpcomponents:httpclient:4.1.2'
 		runtime 'org.apache.httpcomponents:httpcore:4.1.2'
 		runtime 'org.apache.httpcomponents:httpclient:4.1.2'
-
+    		compile 'org.codehaus.jackson:jackson-core-asl:1.9.11'
+		compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.11'
         // runtime 'mysql:mysql-connector-java:5.1.22'
     }
 
