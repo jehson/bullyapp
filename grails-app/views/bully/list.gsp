@@ -42,7 +42,7 @@
 					
 						--%>
 						<td>
-							<g:img uri="${driversLicenseImageLink}" />
+							<img src="${bullyInstance.driversLicenseImageLink}" />
 						</td>
 					
 						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseImageLink")}</td>

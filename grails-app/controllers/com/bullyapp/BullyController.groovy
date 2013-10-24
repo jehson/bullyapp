@@ -61,7 +61,7 @@ class BullyController {
 
     def save() {
 	def bully = new Bully(params)
-	getFileDetails bully
+	//getFileDetails bully
 
 	def b64 = Base64.byteArrayToBase64(bully.driversLicenseFile)
 	def reqString = "image=${b64}&key=${clientId}&type=base64"

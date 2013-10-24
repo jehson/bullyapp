@@ -37,7 +37,7 @@
 					<span id="driversLicenseFile-label" class="property-label"><g:message code="bully.driversLicenseFile.label" default="Drivers License File" /></span>
 					
 					<span id="driversLicenseFile-label" class="property-label">
-						<g:img uri="${driversLicenseImageLink}" />
+						<img src="${bullyInstance.driversLicenseImageLink}" />
 					</span>
 					
 				</li>
@@ -47,8 +47,9 @@
 				<li class="fieldcontain">
 					<span id=driversLicenseImageLink-label" class="property-label"><g:message code="bully.driversLicenseImageLink.label" default="Drivers License Image Link" /></span>
 					
-						<span class="property-value" aria-labelledby="driversLicenseImageLinke-label"><g:fieldValue bean="${bullyInstance}" field="driversLicenseImageLink"/></span>
-					
+						<span class="property-value" aria-labelledby="driversLicenseImageLinke-label">
+						<g:link url="${bullyInstance.driversLicenseImageLink}">${bullyInstance.driversLicenseImageLink}</g:link></span>
+						
 				</li>
 				</g:if>
 			
