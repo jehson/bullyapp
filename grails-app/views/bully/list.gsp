@@ -26,15 +26,9 @@
 					
 						<g:sortableColumn property="name" title="${message(code: 'bully.name.label', default: 'Name')}" />
 					
-						<g:sortableColumn property="type" title="${message(code: 'bully.type.label', default: 'Type')}" />
-					
-						<g:sortableColumn property="color" title="${message(code: 'bully.color.label', default: 'Color')}" />
-					
-						<g:sortableColumn property="driversLicenseContentType" title="${message(code: 'bully.driversLicenseContentType.label', default: 'Drivers License Content Type')}" />
-					
 						<g:sortableColumn property="driversLicenseFile" title="${message(code: 'bully.driversLicenseFile.label', default: 'Drivers License File')}" />
 					
-						<g:sortableColumn property="driversLicenseFileName" title="${message(code: 'bully.driversLicenseFileName.label', default: 'Drivers License File Name')}" />
+						<g:sortableColumn property="driversLicenseImageLink" title="${message(code: 'bully.driversLicenseImageLink.label', default: 'Drivers Image Link')}" />
 					
 					</tr>
 				</thead>
@@ -44,18 +38,14 @@
 					
 						<td><g:link action="show" id="${bullyInstance.id}">${fieldValue(bean: bullyInstance, field: "name")}</g:link></td>
 					
-						<td>${fieldValue(bean: bullyInstance, field: "type")}</td>
-					
-						<td>${fieldValue(bean: bullyInstance, field: "color")}</td>
-					
-						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseContentType")}</td>
-						
 						<%--<td>${fieldValue(bean: bullyInstance, field: "driversLicenseFile")}</td>
 					
 						--%>
-						<td><image src="${createLink(controller:'bully', action:'getDriversLicenseImage', id:bullyInstance.ident()) }" width="120 px" /></td>
+						<td>
+							<g:img uri="${driversLicenseImageLink}" />
+						</td>
 					
-						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseFileName")}</td>
+						<td>${fieldValue(bean: bullyInstance, field: "driversLicenseImageLink")}</td>
 					
 					</tr>
 				</g:each>

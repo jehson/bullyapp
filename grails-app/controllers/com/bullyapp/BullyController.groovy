@@ -12,6 +12,7 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils;
 import org.bouncycastle.math.ec.WTauNafMultiplier;
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -19,18 +20,23 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 class BullyController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    
+    def url = 'https://api.imgur.com/3/upload.json'
+    def clientId = '99c5fed06cad39e'
+    def clientSecret = '6744141b06ab5a310850f04bfb36ac956d09ae6f'
+    
     def getFileDetails = { bully ->
 	if(request instanceof MultipartHttpServletRequest) {
 	    MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 	    CommonsMultipartFile file = (CommonsMultipartFile)multiRequest.getFile("driversLicenseFile");
-	    bully.driversLicenseFileName = file.originalFilename
-	    bully.driversLicenseContentType = file.contentType
+	    //bully.driversLicenseFileName = file.originalFilename
+	    //bully.driversLicenseContentType = file.contentType
 	    bully.driversLicenseFile = file.bytes
 	}
     }
 
-    def getDriversLicenseImage = {
+/*
+   def getDriversLicenseImage = {
 	def bullyInstance = Bully.get(params.id);
 	response.setContentType(bullyInstance.driversLicenseContentType);
 	response.setContentLength(bullyInstance.driversLicenseFile.size());
@@ -38,6 +44,7 @@ class BullyController {
 	out.write(bullyInstance.driversLicenseFile);
 	out.close();
     }
+*/
 
     def index() {
 	redirect(action: "list", params: params)
@@ -53,46 +60,62 @@ class BullyController {
     }
 
     def save() {
-	def bullyInstance = new Bully(params)
-	getFileDetails bullyInstance
+	def bully = new Bully(params)
+	getFileDetails bully
 
-	def url = 'https://api.imgur.com/3/upload.json'
-	def clientId = '99c5fed06cad39e'
-	def clientSecret = '6744141b06ab5a310850f04bfb36ac956d09ae6f'
-	def b64 = Base64.byteArrayToBase64(bullyInstance.driversLicenseFile)
-	def reqString = 'image=${b64}&key=${clientId}&type=base64'
-
+	def b64 = Base64.byteArrayToBase64(bully.driversLicenseFile)
+	def reqString = "image=${b64}&key=${clientId}&type=base64"
+	def auth =  "Client-ID ${clientId}"
+	println reqString
+	println auth
 	HttpClient httpClient = new DefaultHttpClient();
 	try {
 	    HttpPost httpPost = new HttpPost(url);
 	    StringEntity body = new StringEntity(reqString);
-	    httpPost.addHeader("Authorization", "Client-ID " + clientId);
-	    httpPost.addHeader("content-type", "application/x-www-form-urlencoded");
+	    httpPost.addHeader('Authorization', auth);
+	    httpPost.addHeader('content-type', 'application/x-www-form-urlencoded');
 	    httpPost.setEntity(body);
 	    HttpResponse httpResponse = httpClient.execute(httpPost);
 	    String responseString = EntityUtils.toString(httpResponse.getEntity());
-
+	    
+	    JSONObject jsonObject = new JSONObject(responseString);
+	    JSONObject jsonData = jsonObject.get("data");
+	    def link = jsonData.get("link");
+	    
+	    bully.driversLicenseImageLink = link;
+	    
 	    // handle response here...
-	    log.debug 'RESPONSE IS: ${responseString}'
+	    log.error "JSON OBJECT is: ${jsonObject} RESPONSE IS: ${responseString}"
+	    
+	    if (!bully.save(flush: true)) {
+		render(view: "create", model: [bullyInstance: bully])
+		return
+	    }
+	    
+	    flash.message = message(code: 'default.created.message', args: [
+		message(code: 'bully.label', default: 'Bully'),
+		bully.id
+	    ])
+	    redirect(action: "show", id: bully.id)
 
 	}catch (Exception ex) {
 	    // handle exception here
 	    log.error 'NO RESPONSE'
 	    log.error ex.printStackTrace()
+	    
+	    flash.message = message(code: 'default.imgur.inaccessible')
+	    
+	    render(view: "create", model: [bullyInstance: bully])
+	    return
+	    
+	    
 	} finally {
 	    httpClient.getConnectionManager().shutdown();
+	    
+	    
 	}
-
-	if (!bullyInstance.save(flush: true)) {
-	    render(view: "create", model: [bullyInstance: bullyInstance])
-	    return
-	}
-
-	flash.message = message(code: 'default.created.message', args: [
-	    message(code: 'bully.label', default: 'Bully'),
-	    bullyInstance.id
-	])
-	redirect(action: "show", id: bullyInstance.id)
+	
+	
     }
 
     def show(Long id) {
