@@ -62,6 +62,13 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+		
+		log4j {
+			logger {
+				grails.'app.controller'="trace,stdout"
+				grails.app="error,stdout"
+			}
+		}
     }
     production {
         grails.logging.jul.usebridge = false
