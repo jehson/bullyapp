@@ -83,12 +83,13 @@ class AnyTests {
 	
 	String auth = "Client-ID ${clientId}"
 	
-	
 	HttpHeaders httpHeaders = new HttpHeaders();
-	httpHeaders.put("Authorization", Collection.asList(auth));
+	httpHeaders.put("Authorization", [auth]);
 	
-	HttpEntity<UploadRequest> httpRequest = new HttpEntity<UploadRequest>();
-	UploadResponse response = template.postForObject(uploadURL, request, UploadResponse.class);
+	HttpEntity<UploadRequest> httpRequest = new HttpEntity<UploadRequest>(request, httpHeaders);
+	
+	UploadResponse response = template.postForObject(uploadURL, httpRequest, UploadResponse.class);
+	assertNotNull response.getData().getLink();
 	
     }
 

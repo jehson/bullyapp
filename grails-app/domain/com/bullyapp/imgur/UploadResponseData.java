@@ -16,7 +16,7 @@ public class UploadResponseData {
     private Boolean favorite;
     private String nsfw;
     private String section;
-    private String deleteHash;
+    private String deletehash;
     private String link;
     
     public String getId() {
@@ -103,11 +103,11 @@ public class UploadResponseData {
     public void setSection(String section) {
         this.section = section;
     }
-    public String getDeleteHash() {
-        return deleteHash;
+    public String getDeletehash() {
+        return deletehash;
     }
-    public void setDeleteHash(String deleteHash) {
-        this.deleteHash = deleteHash;
+    public void setDeleteHash(String deletehash) {
+        this.deletehash = deletehash;
     }
     public String getLink() {
         return link;
